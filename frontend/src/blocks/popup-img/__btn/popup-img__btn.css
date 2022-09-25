@@ -1,0 +1,14 @@
+.popup-img__btn {
+    top: -40px;
+    right: -35px;
+}
+
+@media screen and (max-width: 540px) {
+    .popup-img__btn {  
+        width: 20px;
+        height: 20px;
+        background-size: 20px;
+        top: -35px;
+        right: 0;
+    }
+}
