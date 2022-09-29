@@ -1,3 +1,4 @@
+const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -13,12 +14,33 @@ const { PORT = 3000 } = process.env;
 
 const app = express();
 
+const option = {
+  origin: [
+    'http://',
+    'https://',
+    'https://',
+  ],
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  allowedHeaders: ['Content-Type', 'origin', 'Authorization'],
+  credentials: true,
+};
+
+app.use(cors(option));
+
 app.use(helmet());
 app.disable('x-powered-by');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
 
 app.post(
   '/signin',
