@@ -5,15 +5,22 @@ require('dotenv').config();
 const { JWT_SECRET } = process.env;
 
 module.exports.auth = (req, res, next) => {
-  const token = req.cookies.jwt;
+  // const token = req.cookies.jwt;
   let payload;
+  const { authorization } = req.headers;
 
-  try {
-    payload = jwt.verify(token, JWT_SECRET);
-  } catch (err) {
-    next(new UnauthorizedError('Токен не найден'));
+  if (!authorization || !authorization.startsWith('Bearer ')) {
+    next(new UnauthorizedError('Ошибка авторизации'));
+  } else {
+    const token = authorization.replace('Bearer ', '');
+
+    try {
+      payload = jwt.verify(token, JWT_SECRET);
+    } catch (err) {
+      next(new UnauthorizedError('Токен не найден'));
+    }
+
+    req.user = payload;
   }
-
-  req.user = payload;
   next();
 };
