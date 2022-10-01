@@ -5,7 +5,24 @@ require('dotenv').config();
 const { JWT_SECRET } = process.env;
 
 module.exports.auth = (req, res, next) => {
-  // const token = req.cookies.jwt;
+  // // const token = req.cookies.jwt;
+  // let payload;
+  // const { authorization } = req.headers;
+
+  // if (!authorization || !authorization.startsWith('Bearer ')) {
+  //   next(new UnauthorizedError('Ошибка авторизации'));
+  // } else {
+  //   const token = authorization.replace('Bearer ', '');
+
+  //   try {
+  //     payload = jwt.verify(token, JWT_SECRET);
+  //   } catch (err) {
+  //     next(new UnauthorizedError('Токен не найден'));
+  //   }
+
+  //   req.user = payload;
+  // }
+  // next();
   let payload;
   const { authorization } = req.headers;
 
@@ -16,11 +33,10 @@ module.exports.auth = (req, res, next) => {
 
     try {
       payload = jwt.verify(token, JWT_SECRET);
+      req.user = payload;
     } catch (err) {
-      next(new UnauthorizedError('Токен не найден'));
+      next(new UnauthorizedError('Ошибка авторизации'));
     }
-
-    req.user = payload;
   }
   next();
 };
