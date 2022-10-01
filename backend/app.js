@@ -1,9 +1,9 @@
-const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 const { celebrate, Joi, errors } = require('celebrate');
 const { createUser, login } = require('./controllers/users');
 const { validateUrl } = require('./middlewares/validation');
@@ -14,12 +14,19 @@ const { PORT = 3000 } = process.env;
 
 const app = express();
 
-const option = {
+app.use(helmet());
+app.disable('x-powered-by');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+const options = {
   origin: [
     'http://api.spichka.nomoredomains.icu',
     'https://api.spichka.nomoredomains.icu',
-    'http://spichka.nomoredomains.icu',
     'https://spichka.nomoredomains.icu',
+    'http://spichka.nomoredomains.icu',
   ],
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
   preflightContinue: false,
@@ -28,20 +35,7 @@ const option = {
   credentials: true,
 };
 
-app.use(cors(option));
-
-app.use(helmet());
-app.disable('x-powered-by');
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
-
-app.get('/crash-test', () => {
-  setTimeout(() => {
-    throw new Error('Сервер сейчас упадёт');
-  }, 0);
-});
+app.use('*', cors(options));
 
 app.post(
   '/signin',
