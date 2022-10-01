@@ -2,41 +2,18 @@ const jwt = require('jsonwebtoken');
 const UnauthorizedError = require('../errors/unauthorizedError');
 require('dotenv').config();
 
-const { JWT_SECRET } = process.env;
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 module.exports.auth = (req, res, next) => {
-  // // const token = req.cookies.jwt;
-  // let payload;
-  // const { authorization } = req.headers;
-
-  // if (!authorization || !authorization.startsWith('Bearer ')) {
-  //   next(new UnauthorizedError('Ошибка авторизации'));
-  // } else {
-  //   const token = authorization.replace('Bearer ', '');
-
-  //   try {
-  //     payload = jwt.verify(token, JWT_SECRET);
-  //   } catch (err) {
-  //     next(new UnauthorizedError('Токен не найден'));
-  //   }
-
-  //   req.user = payload;
-  // }
-  // next();
+  const token = req.cookies.jwt;
   let payload;
-  const { authorization } = req.headers;
 
-  if (!authorization || !authorization.startsWith('Bearer ')) {
-    next(new UnauthorizedError('Ошибка авторизации'));
-  } else {
-    const token = authorization.replace('Bearer ', '');
-
-    try {
-      payload = jwt.verify(token, JWT_SECRET);
-      req.user = payload;
-    } catch (err) {
-      next(new UnauthorizedError('Ошибка авторизации'));
-    }
+  try {
+    payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
+  } catch (err) {
+    next(new UnauthorizedError('Отсутсвует токен'));
   }
+
+  req.user = payload;
   next();
 };
