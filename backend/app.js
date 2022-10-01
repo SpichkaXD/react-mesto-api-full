@@ -16,9 +16,10 @@ const app = express();
 
 const option = {
   origin: [
-    'http://',
-    'https://',
-    'https://',
+    'http://api.spichka.nomoredomains.icu',
+    'https://api.spichka.nomoredomains.icu',
+    'http://spichka.nomoredomains.icu',
+    'https://spichka.nomoredomains.icu',
   ],
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
   preflightContinue: false,
