@@ -116,6 +116,7 @@ module.exports.login = (req, res, next) => {
       res.cookie('jwt', token, {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
+        sameSite: true,
       });
       res.send({ token });
     })
@@ -137,5 +138,17 @@ module.exports.getUserProfile = async (req, res, next) => {
       return next(new ValidateError('Передан некорректный _id пользователя'));
     }
     return next(err);
+  }
+};
+
+module.exports.logout = async (req, res, next) => {
+  try {
+    if (!req.cookies) {
+      next(new UnauthorizedError('Пользователь не авторизован'));
+      return;
+    }
+    res.clearCookie('jwt').send({ message: 'token удалён' }).end();
+  } catch (err) {
+    next(err);
   }
 };
