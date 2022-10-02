@@ -8,6 +8,7 @@ const { createUser, login } = require('./controllers/users');
 const { validateUrl } = require('./middlewares/validation');
 const { auth } = require('./middlewares/auth');
 const NotFoundError = require('./errors/NotFoundError');
+require('dotenv').config();
 
 const { PORT = 3000 } = process.env;
 
