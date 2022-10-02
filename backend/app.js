@@ -10,7 +10,7 @@ const { validateUrl } = require('./middlewares/validation');
 const { auth } = require('./middlewares/auth');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const NotFoundError = require('./errors/notFoundError');
-const { cors } = require('./middlewares/cors');
+const cors = require('./middlewares/cors');
 
 const { PORT = 3000 } = process.env;
 
