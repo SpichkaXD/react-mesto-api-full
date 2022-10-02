@@ -2,22 +2,19 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-// const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
-const { celebrate, Joi, errors } = require('celebrate');
-const { createUser, login, logout } = require('./controllers/users');
-const { validateUrl } = require('./middlewares/validation');
-const { auth } = require('./middlewares/auth');
-const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { celebrate, Joi } = require('celebrate');
+const { errors } = require('celebrate');
 const NotFoundError = require('./errors/notFoundError');
+const { createUser, login, logout } = require('./controllers/users');
+const { auth } = require('./middlewares/auth');
+const { validateUrl } = require('./middlewares/validation');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 const cors = require('./middlewares/cors');
 
-const PORT = process.env.PORT;
+const { PORT = 3000 } = process.env;
 
 const app = express();
-
-// app.use(helmet());
-// app.disable('x-powered-by');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -36,7 +33,7 @@ app.post(
   celebrate({
     body: Joi.object().keys({
       email: Joi.string().required().email(),
-      password: Joi.string().required(),
+      password: Joi.string().required().min(6),
     }),
   }),
   login,
@@ -46,7 +43,7 @@ app.post(
   celebrate({
     body: Joi.object().keys({
       email: Joi.string().required().email(),
-      password: Joi.string().required().required(),
+      password: Joi.string().required().required().min(6),
       avatar: Joi.string().custom(validateUrl),
       name: Joi.string().min(2).max(30),
       about: Joi.string().min(2).max(30),
@@ -55,13 +52,6 @@ app.post(
   createUser,
 );
 
-app.use(errorLogger);
-
-// // claerCookies
-// app.get('/signout', (req, res) => {
-//   res.clearCookie('jwt').send({ message: 'Выход' });
-// });
-
 app.use(auth);
 
 app.post('/signout', logout);
@@ -69,6 +59,8 @@ app.post('/signout', logout);
 app.use('/users', require('./routes/users'));
 
 app.use('/cards', require('./routes/cards'));
+
+app.use(errorLogger);
 
 app.use('*', (req, res, next) => {
   next(new NotFoundError('Страница не найдена'));

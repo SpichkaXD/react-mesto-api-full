@@ -50,4 +50,3 @@ cardRouter.delete(
 );
 
 module.exports = cardRouter;
-module.exports = cardRouter;
