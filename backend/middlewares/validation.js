@@ -1,5 +1,5 @@
 const validator = require('validator');
-const ValidateError = require('../errors/ValidateError');
+const ValidateError = require('../errors/validateError');
 
 module.exports.validateUrl = (value) => {
   const res = validator.isURL(value);
