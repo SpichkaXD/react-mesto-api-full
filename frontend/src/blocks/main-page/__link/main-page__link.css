@@ -1,0 +1,10 @@
+.main-page__link {
+    margin-left: 4px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.main-page__link:hover {
+    cursor: pointer;
+    opacity: 0.85;
+}

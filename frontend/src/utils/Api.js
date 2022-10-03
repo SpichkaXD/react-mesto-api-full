@@ -4,6 +4,10 @@ export default class Api {
         this._headers = headers;
     }
 
+    getAllData() {
+        return Promise.all([this.getCards(), this.getUsersInfo()]);
+    }
+
     _handleResponse(res) {
         if (res.ok) {
             return res.json();
@@ -11,12 +15,6 @@ export default class Api {
         return Promise.reject(`Ошибка: ${res.status}`);
     }
 
-    getCards() {
-        return fetch(`${this._url}/cards`, {
-            method: "GET",
-            headers: this._headers,
-        }).then(this._handleResponse);
-    }
     getCards() {
         return fetch(`${this._url}/cards`, {
             method: "GET",

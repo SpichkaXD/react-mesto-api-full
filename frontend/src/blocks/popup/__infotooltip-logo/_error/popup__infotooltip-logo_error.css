@@ -1,0 +1,4 @@
+.popup__infotooltip-logo_error {
+    background-image: url(../../../../images/popup/icon-error.svg);
+    color: red;
+}

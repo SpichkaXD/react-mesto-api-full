@@ -5,7 +5,7 @@ function PopupWithForm({ name, title, children, buttonName, isOpen, onClose, onO
             onMouseDown={onOverlayClose}
         >
             <div className="popup__container">
-                <form action="#" name={name} className="popup__form" noValidate onSubmit={onSubmit}>
+                <form action="#" name={name} className="popup__form" onSubmit={onSubmit}>
                     <h2 className="popup__title">{title}</h2>
                     {children}
                     <button type="submit" aria-label="Сохранить" className="popup__submit-button">
