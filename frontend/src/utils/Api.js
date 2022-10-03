@@ -86,7 +86,7 @@ export default class Api {
 }
 
 export const api = new Api({
-    url: "https://api.spichka.nomoredomains.icu",
+    url: "http://api.spichka.nomoredomains.icu",
     headers: {
         authorization: "96c1b86f-aa6e-4f39-8274-9861f5042d0a",
         "Content-Type": "application/json",

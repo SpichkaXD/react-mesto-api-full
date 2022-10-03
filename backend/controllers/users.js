@@ -33,13 +33,7 @@ module.exports.getUserId = async (req, res, next) => {
 };
 
 module.exports.createUser = async (req, res, next) => {
-  const {
-    name,
-    about,
-    avatar,
-    email,
-    password,
-  } = req.body;
+  const { name, about, avatar, email, password } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await User.create({
@@ -52,7 +46,11 @@ module.exports.createUser = async (req, res, next) => {
     return res.status(201).send(user);
   } catch (err) {
     if (err.name === 'ValidationError') {
-      next(new ValidateError('Переданы некорректные данные при создании пользователя'));
+      next(
+        new ValidateError(
+          'Переданы некорректные данные при создании пользователя'
+        )
+      );
     }
     if (err.code === 11000) {
       next(new ConflictError('Пользователь с таким email уже существует'));
@@ -67,7 +65,7 @@ module.exports.updateProfile = async (req, res, next) => {
     const user = await User.findByIdAndUpdate(
       req.user._id,
       { name, about },
-      { new: true, runValidators: true },
+      { new: true, runValidators: true }
     );
     if (!user) {
       throw new NotFoundError('Пользователь по указанному _id не найден');
@@ -78,7 +76,11 @@ module.exports.updateProfile = async (req, res, next) => {
       next(new ValidateError('Передан некорректный _id пользователя'));
     }
     if (err.name === 'ValidationError') {
-      next(new ValidateError('Переданы некорректные данные при создании пользователя'));
+      next(
+        new ValidateError(
+          'Переданы некорректные данные при создании пользователя'
+        )
+      );
     }
     return next(err);
   }
@@ -90,7 +92,7 @@ module.exports.updateAvatar = async (req, res, next) => {
     const user = await User.findByIdAndUpdate(
       req.user._id,
       { avatar },
-      { new: true, runValidators: true },
+      { new: true, runValidators: true }
     );
     if (!user) {
       throw new NotFoundError('Пользователь по указанному _id не найден');
@@ -101,7 +103,11 @@ module.exports.updateAvatar = async (req, res, next) => {
       next(new ValidateError('Передан некорректный _id пользователя'));
     }
     if (err.name === 'ValidationError') {
-      next(new ValidateError('Переданы некорректные данные при создании пользователя'));
+      next(
+        new ValidateError(
+          'Переданы некорректные данные при создании пользователя'
+        )
+      );
     }
     return next(err);
   }
@@ -112,7 +118,10 @@ module.exports.login = (req, res, next) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret'
+      );
 
       res.cookie('jwt', token, {
         maxAge: 3600000 * 24 * 7,
