@@ -22,10 +22,6 @@ app.use(cookieParser());
 app.use(cors);
 app.use(requestLogger);
 
-app.get('/posts', (req, res) => {
-  console.log(req.cookies.jwt); // достаём токен
-});
-
 app.get('/crash-test', () => {
   setTimeout(() => {
     throw new Error('Сервер сейчас упадёт');
