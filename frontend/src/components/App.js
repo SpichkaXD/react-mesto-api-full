@@ -50,20 +50,20 @@ function App() {
         }
     }, [loggedIn]);
 
-    // function handlTokenCheck() {
-    //     const token = localStorage.getItem("token");
-    //     if (token) {
-    //         Auth.getContent(token)
-    //             .then((res) => {
-    //                 if (res) {
-    //                     setLoggedIn(true);
-    //                     setUserInfo(res.data.email);
-    //                     history.push("/");
-    //                 }
-    //             })
-    //             .catch((err) => console.log(err));
-    //     }
-    // }
+    function handlTokenCheck() {
+        const token = localStorage.getItem("token");
+        if (token) {
+            Auth.getContent(token)
+                .then((res) => {
+                    if (res) {
+                        setLoggedIn(true);
+                        setUserInfo(res.data.email);
+                        history.push("/");
+                    }
+                })
+                .catch((err) => console.log(err));
+        }
+    }
 
     const onRegister = (password, email) => {
         Auth.register(password, email)

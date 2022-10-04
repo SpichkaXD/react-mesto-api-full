@@ -6,6 +6,8 @@ const ValidateError = require('../errors/validateError');
 const ConflictError = require('../errors/conflictError');
 const UnauthorizedError = require('../errors/unauthorizedError');
 
+const { NODE_ENV, JWT_SECRET } = process.env;
+
 module.exports.getUsers = async (req, res, next) => {
   try {
     const users = await User.find({});
@@ -109,11 +111,12 @@ module.exports.login = (req, res, next) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, 'some-secret-key');
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
 
       res.cookie('jwt', token, {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
+        sameSite: true,
       });
       res.send({ token });
     })
@@ -122,6 +125,19 @@ module.exports.login = (req, res, next) => {
     })
     .catch(next);
 };
+
+// module.exports.login = (req, res, next) => {
+//   const { email, password } = req.body;
+//   User.findUserByCredentials(email, password)
+//     .then((user) => {
+//       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key', {
+//         expiresIn: 604800,
+//       });
+//       res
+//         .send({ token, message: 'Авторизация прошла успешно' });
+//     })
+//     .catch(next);
+// };
 
 module.exports.getUserProfile = async (req, res, next) => {
   try {
@@ -135,5 +151,17 @@ module.exports.getUserProfile = async (req, res, next) => {
       return next(new ValidateError('Передан некорректный _id пользователя'));
     }
     return next(err);
+  }
+};
+
+module.exports.logout = async (req, res, next) => {
+  try {
+    if (!req.cookies) {
+      next(new UnauthorizedError('Пользователь не авторизован'));
+      return;
+    }
+    res.clearCookie('jwt').send({ message: 'token удалён' }).end();
+  } catch (err) {
+    next(err);
   }
 };
