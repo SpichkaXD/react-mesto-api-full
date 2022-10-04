@@ -126,19 +126,6 @@ module.exports.login = (req, res, next) => {
     .catch(next);
 };
 
-// module.exports.login = (req, res, next) => {
-//   const { email, password } = req.body;
-//   User.findUserByCredentials(email, password)
-//     .then((user) => {
-//       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key', {
-//         expiresIn: 604800,
-//       });
-//       res
-//         .send({ token, message: 'Авторизация прошла успешно' });
-//     })
-//     .catch(next);
-// };
-
 module.exports.getUserProfile = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
