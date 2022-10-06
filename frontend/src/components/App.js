@@ -10,8 +10,8 @@ import Login from "./Login";
 import Register from "./Register";
 import ProtectedRoute from "./ProtectedRoute";
 import InfoTooltipPopup from "./InfoTooltipPopup";
-import Auth from "../utils/Auth";
-
+// import Auth from "../utils/Auth";
+import * as Auth from '../utils/Auth'
 
 import PopupWithConfirm from "./PopupWithConfirm";
 
@@ -39,55 +39,74 @@ function App() {
     const history = useHistory();
 
     useEffect(() => {
-        handlTokenCheck();
         if (loggedIn) {
-            api.getAllData()
-                .then(([data, user]) => {
-                    setCards(data);
+            getUserData();
+        }
+    });
+
+    function getUserData() {
+        Auth.getEmail()
+            .then((res) => {
+                setUserInfo(res.email);
+                setLoggedIn(true);
+            })
+            .catch((error) => {
+                console.log(`Ошибка: ${error}`);
+            });
+    }
+
+    useEffect(() => {
+        if (loggedIn) {
+            history.push("/");
+        }
+    }, [loggedIn, history]);
+
+    // useEffect(() => {
+    //     handlTokenCheck();
+    //     if (loggedIn) {
+    //         api.getAllData()
+    //             .then(([data, user]) => {
+    //                 setCards(data);
+    //                 setCurrentUser(user);
+    //             })
+    //             .catch((err) => console.log(err));
+    //     }
+    // }, [loggedIn]);
+
+    useEffect(() => {
+        if (loggedIn) {
+            Promise.all([api.getUsersInfo(), api.getCards()])
+                .then(([user, cardInfo]) => {
                     setCurrentUser(user);
+                    setCards(cardInfo);
                 })
-                .catch((err) => console.log(err));
+                .catch((error) => {
+                    console.log(`Ошибка: ${error}`);
+                });
         }
     }, [loggedIn]);
 
-    function handlTokenCheck() {
-        const token = localStorage.getItem("token");
-        if (token) {
-            Auth.getContent(token)
-                .then((res) => {
-                    if (res) {
-                        setLoggedIn(true);
-                        setUserInfo(res.data.email);
-                        history.push("/");
-                    }
-                })
-                .catch((err) => console.log(err));
-        }
-    }
+    // function handlTokenCheck() {
+    //     const token = localStorage.getItem("token");
+    //     if (token) {
+    //         Auth.getContent(token)
+    //             .then((res) => {
+    //                 if (res) {
+    //                     setLoggedIn(true);
+    //                     setUserInfo(res.data.email);
+    //                     history.push("/");
+    //                 }
+    //             })
+    //             .catch((err) => console.log(err));
+    //     }
+    // }
 
     const onRegister = (password, email) => {
         Auth.register(password, email)
             .then((res) => {
                 if (res) {
-                    
                     setInfoStatus("success");
                     history.push("/sign-in");
-                }
-            })
-            .catch((e) => {
-                setInfoStatus("fail");
-            })
-    };
-
-    const onLogin = (password, email) => {
-        Auth.authorize(password, email)
-            .then((res) => {
-                if (res.token) {
-                    localStorage.setItem("token", res.token);
-                    setUserInfo(email);
-                    setLoggedIn(true);
-                } else {
-                    setInfoStatus("fail");
                 }
             })
             .catch((e) => {
@@ -95,10 +114,46 @@ function App() {
             });
     };
 
+    const onLogin = (password, email) => {
+        Auth.authorize(password, email)
+            .then((res) => {
+                setUserInfo(email);
+                setLoggedIn(() => {
+                    localStorage.setItem("isloggedIn", true);
+                    return true;
+                });
+                // .then((res) => {
+                //     if (res.token) {
+                //         localStorage.setItem("token", res.token);
+                //         setUserInfo(email);
+                //         setLoggedIn(true);
+                //     } else {
+                //         setInfoStatus("fail");
+                //     }
+            })
+            .catch((e) => {
+                setInfoStatus("fail");
+            });
+    };
+
+    // const onLogout = () => {
+    //     setLoggedIn(false);
+    //     localStorage.removeItem("token");
+    //     history.push("/sign-in");
+    // };
     const onLogout = () => {
-        setLoggedIn(false);
-        localStorage.removeItem("token");
-        history.push("/sign-in");
+        Auth.logOut()
+            .then(() => {
+                setLoggedIn(() => {
+                    localStorage.removeItem("isloggedIn");
+                    return false;
+                });
+                setUserInfo("");
+                history.push("/sign-in");
+            })
+            .catch((error) => {
+                console.log(`Ошибка: ${error}`);
+            });
     };
 
     function handleEditAvatarClick() {
@@ -218,7 +273,6 @@ function App() {
             };
         }
     }, [isEditProfilePopupOpen, isAddPlacePopupOpen, isEditAvatarPopupOpen, isImagePopupOpen]);
-
 
     return (
         <CurrentUserContext.Provider value={currentUser}>

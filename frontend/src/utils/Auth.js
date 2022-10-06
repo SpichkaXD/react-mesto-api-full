@@ -1,63 +1,48 @@
-class Auth {
-    constructor({ baseUrl }) {
-        this._baseUrl = baseUrl;
+export const BASE_URL = "https://api.spichka.nomoredomains.icu";
+// export const BASE_URL = "https://nomoreparties.co/v1/cohort-44";
+
+export const handleResponse = (res) => {
+    if (res.ok) {
+        return res.json();
     }
+    return Promise.reject(res.status);
+};
 
-    register(password, email) {
-        return fetch(`${this._baseUrl}/signup`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                password,
-                email,
-            }),
-        })
-            .then((res) => {
-                if (!res.ok) {
-                    return Promise.reject(res.statusText);
-                }
-                return res.json();
-            })
-            .catch((err) => {
-                return Promise.reject(err);
-            });
-    }
+export const headers = {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+};
 
-    authorize(password, email) {
-        return fetch(`${this._baseUrl}/signin`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                password,
-                email,
-            }),
-        }).then((res) => {
-            if (!res.ok) {
-                return Promise.reject(res.statusText);
-            }
-            return res.json();
-        });
-    }
+export const register = ({ email, password }) => {
+    return fetch(`${BASE_URL}/signup`, {
+        method: "POST",
+        headers,
+        credentials: "include",
+        body: JSON.stringify({ email, password }),
+    }).then((res) => handleResponse(res));
+};
 
-    getContent(token) {
-        return fetch(`${this._baseUrl}/users/me`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        }).then((res) => {
-            return res.json();
-        });
-    }
-}
+export const authorize = ({ email, password }) => {
+    return fetch(`${BASE_URL}/signin`, {
+        method: "POST",
+        headers,
+        credentials: "include",
+        body: JSON.stringify({ email, password }),
+    }).then((res) => handleResponse(res));
+};
 
-const auth = new Auth({
-    baseUrl: "http://api.spichka.nomoredomains.icu",
-});
+export const getEmail = () => {
+    return fetch(`${BASE_URL}/users/me`, {
+        method: "GET",
+        headers,
+        credentials: "include",
+    }).then((res) => handleResponse(res));
+};
 
-export default auth;
+export const logOut = () => {
+    return fetch(`${BASE_URL}/signout`, {
+        method: "POST",
+        headers,
+        credentials: "include",
+    }).then((res) => handleResponse(res));
+};
