@@ -59,8 +59,6 @@ app.post(
   createUser,
 );
 
-app.use(errorLogger);
-
 // claerCookies
 app.get('/signout', (req, res) => {
   res.clearCookie('jwt').send({ message: 'Выход' });
@@ -73,6 +71,8 @@ app.post('/signout', logout);
 app.use('/users', require('./routes/users'));
 
 app.use('/cards', require('./routes/cards'));
+
+app.use(errorLogger);
 
 app.use('*', (req, res, next) => {
   next(new NotFoundError('Страница не найдена'));
