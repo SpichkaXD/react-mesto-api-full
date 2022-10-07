@@ -1,24 +1,19 @@
+import {Route, Switch, Redirect, useHistory} from 'react-router-dom';
+import { useEffect, useState } from "react";
+import {CurrentUserContext} from "../contexts/CurrentUserContext";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
-// import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
-import Login from "./Login";
-import Register from "./Register";
-import ProtectedRoute from "./ProtectedRoute";
-import InfoTooltipPopup from "./InfoTooltipPopup";
-// import Auth from "../utils/Auth";
-import * as Auth from '../utils/Auth'
-
 import PopupWithConfirm from "./PopupWithConfirm";
-
-import { api } from "../utils/Api";
-import { useEffect, useState } from "react";
-import { Route, Switch, Redirect, useHistory } from "react-router-dom";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import Register from "./Register";
+import Login from "./Login";
+import ProtectedRoute from "./ProtectedRoute";;
+import { api } from "../utils/api";
+import * as Auth from '../utils/auth'
 
 function App() {
     const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
