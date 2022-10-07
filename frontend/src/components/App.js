@@ -1,6 +1,6 @@
-import {Route, Switch, Redirect, useHistory} from 'react-router-dom';
+import { Route, Switch, Redirect, useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
-import {CurrentUserContext} from "../contexts/CurrentUserContext";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -11,9 +11,10 @@ import AddPlacePopup from "./AddPlacePopup";
 import PopupWithConfirm from "./PopupWithConfirm";
 import Register from "./Register";
 import Login from "./Login";
-import ProtectedRoute from "./ProtectedRoute";;
-import { api } from "../utils/api";
-import * as Auth from '../utils/auth'
+import ProtectedRoute from "./ProtectedRoute";
+import InfoTooltipPopup from "./InfoTooltipPopup";
+import { api } from "../utils/Api";
+import * as Auth from "../utils/auth";
 
 function App() {
     const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -32,6 +33,53 @@ function App() {
     const [selectedCard, setSelectedCard] = useState({});
 
     const history = useHistory();
+
+    function handleCardClick(card) {
+        setSelectedCard(card);
+        handleImagePopupClick();
+    }
+
+    function handleDeleteCardClick(card) {
+        setSelectedCard(card);
+        handlePopupWithConfirmClick();
+    }
+
+    function closeAllPopups() {
+        setIsEditProfilePopupOpen(false);
+        setIsAddPlacePopupOpen(false);
+        setIsEditAvatarPopupOpen(false);
+        setIsImagePopupOpen(false);
+        setIsPopupWithConfirmOpen(false);
+        setSelectedCard({});
+        setInfoStatus(false);
+    }
+
+    // закрытие по оверлею
+    function closePopupOnOverlay(evt) {
+        if (evt.target === evt.currentTarget) {
+            closeAllPopups();
+        }
+    }
+
+    function handleEditProfileClick() {
+        setIsEditProfilePopupOpen(true);
+    }
+
+    function handleEditAvatarClick() {
+        setIsEditAvatarPopupOpen(true);
+    }
+
+    function handleAddPlaceClick() {
+        setIsAddPlacePopupOpen(true);
+    }
+
+    function handleImagePopupClick() {
+        setIsImagePopupOpen(true);
+    }
+
+    function handlePopupWithConfirmClick() {
+        setIsPopupWithConfirmOpen(true);
+    }
 
     useEffect(() => {
         if (loggedIn) {
@@ -151,51 +199,11 @@ function App() {
             });
     };
 
-    function handleEditAvatarClick() {
-        setIsEditAvatarPopupOpen(true);
-    }
-
-    function handleEditProfileClick() {
-        setIsEditProfilePopupOpen(true);
-    }
-
-    function handleAddPlaceClick() {
-        setIsAddPlacePopupOpen(true);
-    }
-
-    function handleImagePopupClick() {
-        setIsImagePopupOpen(true);
-    }
-
-    function handlePopupWithConfirmClick() {
-        setIsPopupWithConfirmOpen(true);
-    }
-
-    function closeAllPopups() {
-        setIsEditProfilePopupOpen(false);
-        setIsAddPlacePopupOpen(false);
-        setIsEditAvatarPopupOpen(false);
-        setIsImagePopupOpen(false);
-        setIsPopupWithConfirmOpen(false);
-        setSelectedCard({});
-        setInfoStatus(false);
-    }
-
-    function handleCardClick(card) {
-        setSelectedCard(card);
-        handleImagePopupClick();
-    }
-
-    function handleDeleteCardClick(card) {
-        setSelectedCard(card);
-        handlePopupWithConfirmClick();
-    }
-
     function handleCardLike(card) {
         // Снова проверяем, есть ли уже лайк на этой карточке
         const isLiked = card.likes.some((i) => i._id === currentUser._id);
         // Отправляем запрос в API и получаем обновлённые данные карточки
-        api.setLike(card._id, isLiked)
+     api.setLike(card._id, isLiked)
             .then((newCard) => {
                 setCards((cards) => cards.map((c) => (c._id === card._id ? newCard : c)));
             })
@@ -205,7 +213,7 @@ function App() {
     }
 
     function handleCardDelete(card) {
-        api.deleteCard(card._id)
+     api.deleteCard(card._id)
             .then(() => {
                 setCards((cards) => cards.filter((c) => c._id !== card._id));
             })
@@ -215,7 +223,7 @@ function App() {
     }
 
     function handleUpdateUser(user) {
-        api.setUsersInfo(user)
+     api.setUsersInfo(user)
             .then((data) => {
                 setCurrentUser(data);
                 closeAllPopups();
@@ -226,7 +234,7 @@ function App() {
     }
 
     function handleUpdateAvatar(user) {
-        api.setUserAvatar(user)
+     api.setUserAvatar(user)
             .then((data) => {
                 setCurrentUser(data);
                 closeAllPopups();
@@ -237,7 +245,7 @@ function App() {
     }
 
     function handleAddPlaceSubmit(data) {
-        api.addCard(data)
+     api.addCard(data)
             .then((newCard) => {
                 setCards([newCard, ...cards]);
                 closeAllPopups();
@@ -247,12 +255,6 @@ function App() {
             });
     }
 
-    // закрытие по оверлею
-    function closePopupOnOverlay(evt) {
-        if (evt.target === evt.currentTarget) {
-            closeAllPopups();
-        }
-    }
     // закрытие по нажатию esc
     useEffect(() => {
         if (isEditProfilePopupOpen || isAddPlacePopupOpen || isEditAvatarPopupOpen || isImagePopupOpen) {
