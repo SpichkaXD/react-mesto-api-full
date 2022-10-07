@@ -119,7 +119,7 @@ function App() {
             .then((res) => {
                 setUserInfo(email);
                 setLoggedIn(() => {
-                    localStorage.setItem("isloggedIn", true);
+                    localStorage.setItem("loggedIn", true);
                     return true;
                 });
                 // .then((res) => {
@@ -145,7 +145,7 @@ function App() {
         Auth.logOut()
             .then(() => {
                 setLoggedIn(() => {
-                    localStorage.removeItem("isloggedIn");
+                    localStorage.removeItem("loggedIn");
                     return false;
                 });
                 setUserInfo("");

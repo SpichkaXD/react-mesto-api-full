@@ -5,7 +5,7 @@ import { Switch, Route} from "react-router-dom";
 function Header({ onLogout, userInfo }) {
     return (
         <header className="header">
-            <a className="header__logo" href="#"></a>
+            <Link className="header__logo" href="#"></Link>
             <Switch>
                 <Route path="/sign-in">
                     <a className="header__link" href="/sign-up">

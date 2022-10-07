@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-
 function Register({ onRegister }) {
     const [registerData, setRegisterData] = useState({
         email: "",
@@ -27,6 +26,8 @@ function Register({ onRegister }) {
             <form className="main-page" onSubmit={handleSubmit}>
                 <input
                     required
+                    minLength="2"
+                    maxLength="30"
                     className="main-page__text"
                     type="email"
                     placeholder="Email"
@@ -36,6 +37,8 @@ function Register({ onRegister }) {
                 />
                 <input
                     required
+                    minLength="2"
+                    maxLength="30"
                     className="main-page__text"
                     type="password"
                     placeholder="Пароль"
