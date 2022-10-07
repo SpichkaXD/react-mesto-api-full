@@ -14,7 +14,7 @@ import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute";
 import InfoTooltipPopup from "./InfoTooltipPopup";
 import { api } from "../utils/Api";
-import * as Auth from "../utils/auth";
+import * as Auth from "../utils/Auth";
 
 function App() {
     const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
