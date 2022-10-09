@@ -25,7 +25,7 @@ function App() {
 
     const [userInfo, setUserInfo] = useState(null);
     const [infoStatus, setInfoStatus] = useState(false);
-    const [loggedIn, setLoggedIn] = useState(false);
+    const [loggedIn, setLoggedIn] = useState(localStorage.getItem("loggedIn"));
 
     const [currentUser, setCurrentUser] = useState({});
     const [cards, setCards] = useState([]);
@@ -101,16 +101,15 @@ function App() {
     useEffect(() => {
         if (loggedIn) {
             Promise.all([api.getUsersInfo(), api.getCards()])
-                .then(([user, cardInfo]) => {
+                .then(([data, user]) => {
+                    setCards(data);
                     setCurrentUser(user);
-                    setCards(cardInfo);
                 })
                 .catch((error) => {
                     console.log(`Ошибка: ${error}`);
                 });
         }
     }, [loggedIn]);
-
 
     useEffect(() => {
         if (loggedIn) {
@@ -130,7 +129,6 @@ function App() {
     //     }
     // }, [loggedIn]);
 
-    
     // function handlTokenCheck() {
     //     const token = localStorage.getItem("token");
     //     if (token) {
