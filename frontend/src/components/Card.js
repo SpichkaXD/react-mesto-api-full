@@ -10,7 +10,7 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
     // Создаём переменную, которую после зададим в `className` для кнопки удаления
     const cardDeleteButtonClassName = `card__delete-button ${isOwn ? "card__delete-button_active" : " "}`;
 
-    const isLiked = card.likes.some(i => i === currentUser._id);
+    const isLiked = card.likes.some((i) => i === currentUser._id);
     const cardLikeButtonClassName = `card__like-button ${isLiked ? "card__like-button_active" : ""}`;
 
     function handleCardClick() {
