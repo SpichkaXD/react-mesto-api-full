@@ -81,6 +81,91 @@ function App() {
         setIsPopupWithConfirmOpen(true);
     }
 
+    function handleCardLike(card) {
+        // Снова проверяем, есть ли уже лайк на этой карточке
+        const isLiked = card.likes.some((i) => i._id === currentUser._id);
+        // Отправляем запрос в API и получаем обновлённые данные карточки
+        api.setLike(card._id, isLiked)
+            .then((newCard) => {
+                setCards((cards) => cards.map((c) => (c._id === card._id ? newCard : c)));
+            })
+            .catch((error) => {
+                console.log(`Ошибка: ${error}`);
+            });
+    }
+
+    function handleCardDelete(card) {
+        api.deleteCard(card._id)
+            .then(() => {
+                setCards((cards) => cards.filter((c) => c._id !== card._id));
+            })
+            .catch((error) => {
+                console.log(`Ошибка: ${error}`);
+            });
+    }
+
+    function handleUpdateUser(user) {
+        api.setUsersInfo(user)
+            .then((data) => {
+                setCurrentUser(data);
+                closeAllPopups();
+            })
+            .catch((error) => {
+                console.log(`Ошибка: ${error}`);
+            });
+    }
+
+    function handleUpdateAvatar(user) {
+        api.setUserAvatar(user)
+            .then((data) => {
+                setCurrentUser(data);
+                closeAllPopups();
+            })
+            .catch((error) => {
+                console.log(`Ошибка: ${error}`);
+            });
+    }
+
+    function handleAddPlaceSubmit(data) {
+        api.addCard(data)
+            .then((newCard) => {
+                setCards([newCard, ...cards]);
+                closeAllPopups();
+            })
+            .catch((error) => {
+                console.log(`Ошибка: ${error}`);
+            });
+    }
+
+    // закрытие по нажатию esc
+    useEffect(() => {
+        if (isEditProfilePopupOpen || isAddPlacePopupOpen || isEditAvatarPopupOpen || isImagePopupOpen) {
+            function handleEscClose(evt) {
+                if (evt.key === "Escape") {
+                    closeAllPopups();
+                }
+            }
+
+            document.addEventListener("keydown", handleEscClose);
+            return () => {
+                document.removeEventListener("keydown", handleEscClose);
+            };
+        }
+    }, [isEditProfilePopupOpen, isAddPlacePopupOpen, isEditAvatarPopupOpen, isImagePopupOpen]);
+
+    useEffect(() => {
+        if (loggedIn) {
+            Promise.all([api.getUsersInfo(), api.getCards()])
+                .then(([data, user]) => {
+                    setCards(data);
+                    setCurrentUser(user);
+                })
+                .catch((error) => {
+                    console.log(`Ошибка: ${error}`);
+                });
+        }
+    }, [loggedIn]);
+
     useEffect(() => {
         if (loggedIn) {
             getUserData();
@@ -97,19 +182,6 @@ function App() {
                 console.log(`Ошибка: ${error}`);
             });
     }
-
-    useEffect(() => {
-        if (loggedIn) {
-            Promise.all([api.getUsersInfo(), api.getCards()])
-                .then(([data, user]) => {
-                    setCards(data);
-                    setCurrentUser(user);
-                })
-                .catch((error) => {
-                    console.log(`Ошибка: ${error}`);
-                });
-        }
-    }, [loggedIn]);
 
     useEffect(() => {
         if (loggedIn) {
@@ -198,79 +270,7 @@ function App() {
                 console.log(`Ошибка: ${error}`);
             });
     };
-
-    function handleCardLike(card) {
-        // Снова проверяем, есть ли уже лайк на этой карточке
-        const isLiked = card.likes.some((i) => i._id === currentUser._id);
-        // Отправляем запрос в API и получаем обновлённые данные карточки
-        api.setLike(card._id, isLiked)
-            .then((newCard) => {
-                setCards((cards) => cards.map((c) => (c._id === card._id ? newCard : c)));
-            })
-            .catch((error) => {
-                console.log(`Ошибка: ${error}`);
-            });
-    }
-
-    function handleCardDelete(card) {
-        api.deleteCard(card._id)
-            .then(() => {
-                setCards((cards) => cards.filter((c) => c._id !== card._id));
-            })
-            .catch((error) => {
-                console.log(`Ошибка: ${error}`);
-            });
-    }
-
-    function handleUpdateUser(user) {
-        api.setUsersInfo(user)
-            .then((data) => {
-                setCurrentUser(data);
-                closeAllPopups();
-            })
-            .catch((error) => {
-                console.log(`Ошибка: ${error}`);
-            });
-    }
-
-    function handleUpdateAvatar(user) {
-        api.setUserAvatar(user)
-            .then((data) => {
-                setCurrentUser(data);
-                closeAllPopups();
-            })
-            .catch((error) => {
-                console.log(`Ошибка: ${error}`);
-            });
-    }
-
-    function handleAddPlaceSubmit(data) {
-        api.addCard(data)
-            .then((newCard) => {
-                setCards([newCard, ...cards]);
-                closeAllPopups();
-            })
-            .catch((error) => {
-                console.log(`Ошибка: ${error}`);
-            });
-    }
-
-    // закрытие по нажатию esc
-    useEffect(() => {
-        if (isEditProfilePopupOpen || isAddPlacePopupOpen || isEditAvatarPopupOpen || isImagePopupOpen) {
-            function handleEscClose(evt) {
-                if (evt.key === "Escape") {
-                    closeAllPopups();
-                }
-            }
-
-            document.addEventListener("keydown", handleEscClose);
-            return () => {
-                document.removeEventListener("keydown", handleEscClose);
-            };
-        }
-    }, [isEditProfilePopupOpen, isAddPlacePopupOpen, isEditAvatarPopupOpen, isImagePopupOpen]);
-
+    
     return (
         <CurrentUserContext.Provider value={currentUser}>
             <div className="page">
