@@ -100,6 +100,20 @@ function App() {
 
     useEffect(() => {
         if (loggedIn) {
+            Promise.all([api.getUsersInfo(), api.getCards()])
+                .then(([user, cardInfo]) => {
+                    setCurrentUser(user);
+                    setCards(cardInfo);
+                })
+                .catch((error) => {
+                    console.log(`Ошибка: ${error}`);
+                });
+        }
+    }, [loggedIn]);
+
+
+    useEffect(() => {
+        if (loggedIn) {
             history.push("/");
         }
     }, [loggedIn, history]);
@@ -116,19 +130,7 @@ function App() {
     //     }
     // }, [loggedIn]);
 
-    useEffect(() => {
-        if (loggedIn) {
-            Promise.all([api.getUsersInfo(), api.getCards()])
-                .then(([user, cardInfo]) => {
-                    setCurrentUser(user);
-                    setCards(cardInfo);
-                })
-                .catch((error) => {
-                    console.log(`Ошибка: ${error}`);
-                });
-        }
-    }, [loggedIn]);
-
+    
     // function handlTokenCheck() {
     //     const token = localStorage.getItem("token");
     //     if (token) {
