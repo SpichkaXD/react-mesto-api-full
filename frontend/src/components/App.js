@@ -117,17 +117,17 @@ function App() {
     // }, [loggedIn]);
 
     useEffect(() => {
-        if (loggedIn) {
-            Promise.all([api.getAllData()])
-                .then(([data, user]) => {
+        if (isLoggedIn) {
+            Promise.all([api.getUsersInfo(), api.getCards()])
+                .then(([user, cardInfo]) => {
                     setCurrentUser(user);
-                    setCards(data);
+                    setCards(cardInfo);
                 })
                 .catch((error) => {
                     console.log(`Ошибка: ${error}`);
                 });
         }
-    }, [loggedIn]);
+    }, [isLoggedIn]);
 
     // function handlTokenCheck() {
     //     const token = localStorage.getItem("token");
@@ -201,9 +201,9 @@ function App() {
 
     function handleCardLike(card) {
         // Снова проверяем, есть ли уже лайк на этой карточке
-        const isLiked = card.likes.some(i => i._id === currentUser._id);
+        const isLiked = card.likes.some((i) => i._id === currentUser._id);
         // Отправляем запрос в API и получаем обновлённые данные карточки
-     api.setLike(card._id, isLiked)
+        api.setLike(card._id, isLiked)
             .then((newCard) => {
                 setCards((cards) => cards.map((c) => (c._id === card._id ? newCard : c)));
             })
@@ -213,7 +213,7 @@ function App() {
     }
 
     function handleCardDelete(card) {
-     api.deleteCard(card._id)
+        api.deleteCard(card._id)
             .then(() => {
                 setCards((cards) => cards.filter((c) => c._id !== card._id));
             })
@@ -223,7 +223,7 @@ function App() {
     }
 
     function handleUpdateUser(user) {
-     api.setUsersInfo(user)
+        api.setUsersInfo(user)
             .then((data) => {
                 setCurrentUser(data);
                 closeAllPopups();
@@ -234,7 +234,7 @@ function App() {
     }
 
     function handleUpdateAvatar(user) {
-     api.setUserAvatar(user)
+        api.setUserAvatar(user)
             .then((data) => {
                 setCurrentUser(data);
                 closeAllPopups();
@@ -245,7 +245,7 @@ function App() {
     }
 
     function handleAddPlaceSubmit(data) {
-     api.addCard(data)
+        api.addCard(data)
             .then((newCard) => {
                 setCards([newCard, ...cards]);
                 closeAllPopups();

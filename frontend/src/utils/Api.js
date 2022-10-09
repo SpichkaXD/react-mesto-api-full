@@ -4,9 +4,9 @@ export default class Api {
         this._headers = headers;
     }
 
-    getAllData() {
-        return Promise.all([this.getCards(), this.getUsersInfo()]);
-    }
+    // getAllData() {
+    //     return Promise.all([this.getCards(), this.getUsersInfo()]);
+    // }
 
     _handleResponse(res) {
         if (res.ok) {
