@@ -93,7 +93,7 @@ export default class Api {
 }
 
 export const api = new Api({
-    url: "http://api.spichka.nomoredomains.icu",
+    url: "https://api.spichka.nomoredomains.icu",
     // url: "https://nomoreparties.co/v1/cohort-44",
     headers: {
         // authorization: "96c1b86f-aa6e-4f39-8274-9861f5042d0a",
