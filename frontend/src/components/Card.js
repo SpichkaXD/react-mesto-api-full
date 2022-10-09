@@ -13,7 +13,7 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
     const isLiked = card.likes.some(i => i === currentUser._id);
     const cardLikeButtonClassName = `card__like-button ${isLiked ? "card__like-button_active" : ""}`;
 
-    function handleCardClick() {
+    function handleClick() {
         onCardClick(card);
     }
 
@@ -27,7 +27,7 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
 
     return (
         <li className="card">
-            <img src={card.link} alt={card.name} className="card__image" onClick={handleCardClick} />
+            <img src={card.link} alt={card.name} className="card__image" onClick={handleClick} />
             <button
                 type="button"
                 aria-label="Удалить"
