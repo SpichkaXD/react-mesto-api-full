@@ -42,7 +42,7 @@ function Main({
             <section className="elements">
                 <ul className="elements__container">
                 {console.log(cards)}
-                    {/* {cards.map((card) => {
+                    {cards.map((card) => {
                         
                         return (
                             <Card
@@ -53,7 +53,7 @@ function Main({
                                 onCardDelete={onCardDelete}
                             />
                         );
-                    })} */}
+                    })}
                 </ul>
             </section>
         </main>

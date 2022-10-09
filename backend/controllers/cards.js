@@ -24,9 +24,11 @@ module.exports.createCard = async (req, res, next) => {
     return res.status(201).send(card);
   } catch (err) {
     if (err.name === 'ValidationError') {
-      return next(new ValidateError('Переданы некорректные данные при создании карточки'));
+      return next(
+        new ValidateError('Переданы некорректные данные при создании карточки'),
+      );
     }
-    return next(err);
+    next(err);
   }
 };
 
