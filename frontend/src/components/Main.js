@@ -42,17 +42,17 @@ function Main({
             <section className="elements">
                 <ul className="elements__container">
                 {console.log(cards)}
-                    {props.cards.map((card) => {
+                    {/* {cards.map((card) => {
                         return (
                             <Card
                                 card={card}
                                 key={card._id}
-                                onCardClick={props.onCardClick}
-                                onCardLike={props.onCardLike}
-                                onCardDelete={props.onCardDelete}
+                                onCardClick={onCardClick}
+                                onCardLike={onCardLike}
+                                onCardDelete={onCardDelete}
                             />
                         );
-                    })}
+                    })} */}
                 </ul>
             </section>
         </main>
