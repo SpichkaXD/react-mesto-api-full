@@ -42,15 +42,14 @@ function Main({
             <section className="elements">
                 <ul className="elements__container">
                 {console.log(cards)}
-                    {cards.map((card) => {
-                        
+                    {props.cards.map((card) => {
                         return (
                             <Card
                                 card={card}
                                 key={card._id}
-                                onCardClick={onCardClick}
-                                onCardLike={onCardLike}
-                                onCardDelete={onCardDelete}
+                                onCardClick={props.onCardClick}
+                                onCardLike={props.onCardLike}
+                                onCardDelete={props.onCardDelete}
                             />
                         );
                     })}
