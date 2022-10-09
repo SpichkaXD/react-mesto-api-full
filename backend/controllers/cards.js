@@ -6,7 +6,11 @@ const ForbiddenError = require('../errors/forbiddenError');
 module.exports.getCards = async (req, res, next) => {
   try {
     const cards = await Card.find({});
-    res.status(200).send(cards);
+    cards.then((card) => {
+      if (card !== null) {
+        res.status(200).send(cards);
+      }
+    });
   } catch (err) {
     next(err);
   }
