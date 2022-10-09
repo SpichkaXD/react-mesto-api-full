@@ -118,10 +118,10 @@ function App() {
 
     useEffect(() => {
         if (loggedIn) {
-            Promise.all([api.getUsersInfo(), api.getCards()])
-                .then(([user, cardInfo]) => {
+            Promise.all([api.getAllData()])
+                .then(([data, user]) => {
                     setCurrentUser(user);
-                    setCards(cardInfo);
+                    setCards(data);
                 })
                 .catch((error) => {
                     console.log(`Ошибка: ${error}`);
