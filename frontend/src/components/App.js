@@ -117,7 +117,7 @@ function App() {
     // }, [loggedIn]);
 
     useEffect(() => {
-        if (isLoggedIn) {
+        if (LoggedIn) {
             Promise.all([api.getUsersInfo(), api.getCards()])
                 .then(([user, cardInfo]) => {
                     setCurrentUser(user);
@@ -127,7 +127,7 @@ function App() {
                     console.log(`Ошибка: ${error}`);
                 });
         }
-    }, [isLoggedIn]);
+    }, [LoggedIn]);
 
     // function handlTokenCheck() {
     //     const token = localStorage.getItem("token");
