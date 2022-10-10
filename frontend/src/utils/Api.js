@@ -4,15 +4,11 @@ export default class Api {
         this._headers = headers;
     }
 
-    // getAllData() {
-    //     return Promise.all([this.getCards(), this.getUsersInfo()]);
-    // }
-
     _handleResponse(res) {
         if (res.ok) {
             return res.json();
         }
-        return Promise.reject(`Ошибка: ${res.status}`);
+        return Promise.reject(res.status);
     }
 
     getCards() {
@@ -47,9 +43,8 @@ export default class Api {
         return fetch(`${this._url}/users/me`, {
             method: "GET",
             headers: this._headers,
-            credentials: 'include'
-        })        
-        .then(this._handleResponse);
+            credentials: "include",
+        }).then(this._handleResponse);
     }
 
     setUsersInfo(data) {
@@ -75,17 +70,9 @@ export default class Api {
         }).then(this._handleResponse);
     }
 
-    setLike(cardId) {
+    changeLike(cardId, isLiked) {
         return fetch(`${this._url}/cards/${cardId}/likes`, {
-            method: "PUT",
-            headers: this._headers,
-            credentials: "include",
-        }).then(this._handleResponse);
-    }
-
-    deleteLike(cardId) {
-        return fetch(`${this._url}/cards/${cardId}/likes`, {
-            method: "DELETE",
+            method: isLiked ? "DELETE" : "PUT",
             headers: this._headers,
             credentials: "include",
         }).then(this._handleResponse);
@@ -94,9 +81,7 @@ export default class Api {
 
 export const api = new Api({
     url: "https://api.spichka.nomoredomains.icu",
-    // url: "https://nomoreparties.co/v1/cohort-44",
     headers: {
-        // authorization: "96c1b86f-aa6e-4f39-8274-9861f5042d0a",
         "Content-Type": "application/json",
     },
 });

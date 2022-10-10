@@ -1,8 +1,10 @@
 .card__counter {
-    margin: 3px 0 0 0;
-    font-weight: 400;
-    font-size: 13px;
-    line-height: 1.2;
-    color: #000;
-    text-align: center;
+  margin: 3px 0 0 0;
+  font-family: 'Inter', 'Arial', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.2;
+  color: #000;
+  text-align: center;
 }

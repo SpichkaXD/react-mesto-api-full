@@ -1,13 +1,17 @@
 .elements__container {
-    padding: 0;
-    margin: 0;
-    list-style-type: none;
-    display: flex;
-    flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-width: 880px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(264px, 282px));
+  gap: 20px 17px;
+  justify-items: center;
 }
 
-@media screen and (max-width: 950px) {
-    .elements__container {
-        justify-content: space-between;
-    }
+@media screen and (max-width: 1260px) {
+  .elements__container {
+    grid-template-columns: repeat(auto-fit, minmax(282px, 1fr));
+  }
 }
+

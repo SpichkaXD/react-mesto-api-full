@@ -1,5 +1,4 @@
 export const BASE_URL = "https://api.spichka.nomoredomains.icu";
-// export const BASE_URL = "https://nomoreparties.co/v1/cohort-44";
 
 export const handleResponse = (res) => {
     if (res.ok) {

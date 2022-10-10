@@ -1,31 +1,25 @@
-import { React } from "react";
+import {Route, Switch, Link } from 'react-router-dom';
 
-import { Switch, Route, Link} from "react-router-dom";
-
-function Header({ onLogout, userInfo }) {
-    return (
-        <header className="header">
-            <Link className="header__logo" href="#"></Link>
-            <Switch>
-                <Route path="/sign-in">
-                    <a className="header__link" href="/sign-up">
-                        Регистрация
-                    </a>
-                </Route>
-                <Route path="/sign-up">
-                    <a className="header__link" href="/sign-in">
-                        Войти
-                    </a>
-                </Route>
-                <Route exact path="/">
-                    <div className="header__email">{userInfo}</div>
-                    <a className="header__link" onClick={onLogout}href="/sign-in">
-                        Выйти
-                    </a>
-                </Route>
-            </Switch>
-        </header>
-    );
+function Header({onLogOut, userEmail}) {
+  return (
+    <header className="header">
+      <Link className="header__logo" to="#"></Link>
+      <Switch>
+        <Route exact path="/">
+          <div className="header__info">
+            <p className="header__email">{userEmail}</p>
+            <Link className="header__login" to="/sign-in" onClick={onLogOut}>Выйти</Link>
+          </div>
+        </Route>
+        <Route path="/sign-up">
+          <Link className="header__login" to="/sign-in">Войти</Link>
+        </Route>
+        <Route path="/sign-in">
+          <Link className="header__login" to="/sign-up">Регистрация</Link>
+        </Route>
+      </Switch>
+    </header>
+  )
 }
 
 export default Header;

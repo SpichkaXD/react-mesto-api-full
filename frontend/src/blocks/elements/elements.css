@@ -1,27 +1,17 @@
 .elements {
-  min-height: 400px;
-  padding-top: 51px;
-  margin: 0 auto;
   max-width: 880px;
+  margin: 51px 0 66px;
 }
 
-@media screen and (max-width: 950px) {
+@media screen and (max-width: 1070px) {
   .elements {
-      max-width: 580px;
-      padding: 36px 19px 0;
+    margin: 45px auto 36px;
   }
 }
 
-@media screen and (max-width: 660px) {
+@media screen and (max-width: 635px) {
   .elements {
-      max-width: 282px;
-      padding: 36px 0 0;
-  }
-}
-
-
-@media screen and (max-width: 320px) {
-  .elements {
-      padding: 36px 0 0;
+    margin-top: 0;
+    margin-bottom: 48px;
   }
 }

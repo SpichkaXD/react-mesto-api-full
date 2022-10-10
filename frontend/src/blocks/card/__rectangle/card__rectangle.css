@@ -1,0 +1,7 @@
+.card__rectangle {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 22px 15px 0 21px;
+  max-width: 246px;
+}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 function Login({ onLogin }) {
     const [loginData, setLoginData] = useState({
@@ -6,46 +6,54 @@ function Login({ onLogin }) {
         password: "",
     });
 
-    const handleChange = (e) => {
+    function handleSubmit(e) {
+        e.preventDefault();
+        onLogin(loginData);
+    }
+
+    function handleChange(e) {
         const { name, value } = e.target;
         setLoginData({
             ...loginData,
             [name]: value,
         });
-    };
-
-    function handleSubmit(e) {
-        e.preventDefault();
-        onLogin((loginData));
     }
 
     return (
-        <section className="main-page">
-            <h1 className="main-page__title">Вход</h1>
-            <form className="main-page" onSubmit={handleSubmit}>
+        <div className="register">
+            <form className="register__container" onSubmit={handleSubmit}>
+                <h2 className="register__title">Вход</h2>
                 <input
                     required
-                    name="email"
-                    className="main-page__text"
+                    minLength="2"
+                    maxLength="30"
                     type="email"
-                    placeholder="Email"
+                    name="email"
+                    id="email-input"
+                    value={loginData.email}
                     onChange={handleChange}
-                    value={loginData.email || ''}
+                    className="register__input register__input_type_email"
+                    placeholder="Email"
                 />
+
                 <input
                     required
-                    className="main-page__text"
+                    minLength="2"
+                    maxLength="30"
                     type="password"
-                    placeholder="Пароль"
-                    onChange={handleChange}
-                    value={loginData.password || ''}
                     name="password"
+                    id="password-input"
+                    value={loginData.password}
+                    onChange={handleChange}
+                    className="register__input register__input_type_password"
+                    placeholder="Пароль"
                 />
-                <button type="submit" aria-label="Войти" className="main-page__submit">
+
+                <button type="submit" aria-label="Регистрация" className="register__submit-button">
                     Войти
                 </button>
             </form>
-        </section>
+        </div>
     );
 }
 

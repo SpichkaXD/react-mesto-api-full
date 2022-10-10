@@ -12,9 +12,9 @@ import PopupWithConfirm from "./PopupWithConfirm";
 import Register from "./Register";
 import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute";
-import InfoTooltipPopup from "./InfoTooltipPopup";
-import { api } from "../utils/Api";
-import * as Auth from "../utils/Auth";
+import InfoTooltip from "./InfoTooltip";
+import { api } from "../utils/api";
+import * as auth from "../utils/auth";
 
 function App() {
     const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -22,16 +22,16 @@ function App() {
     const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
     const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
     const [isPopupWithConfirmOpen, setIsPopupWithConfirmOpen] = useState(false);
+    const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
 
-    const [userInfo, setUserInfo] = useState(null);
-    const [infoStatus, setInfoStatus] = useState(false);
-    const [loggedIn, setLoggedIn] = useState(localStorage.getItem("loggedIn"));
+    const [selectedCard, setSelectedCard] = useState({});
 
     const [currentUser, setCurrentUser] = useState({});
     const [cards, setCards] = useState([]);
 
-    const [selectedCard, setSelectedCard] = useState({});
-
+    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("isloggedIn"));
+    const [userEmail, setUserEmail] = useState("");
+    const [infoTooltipStatus, setInfoTooltipStatus] = useState({});
     const history = useHistory();
 
     function handleCardClick(card) {
@@ -50,27 +50,20 @@ function App() {
         setIsEditAvatarPopupOpen(false);
         setIsImagePopupOpen(false);
         setIsPopupWithConfirmOpen(false);
+        setIsInfoTooltipOpen(false);
         setSelectedCard({});
-        setInfoStatus(false);
-    }
-
-    // закрытие по оверлею
-    function closePopupOnOverlay(evt) {
-        if (evt.target === evt.currentTarget) {
-            closeAllPopups();
-        }
     }
 
     function handleEditProfileClick() {
         setIsEditProfilePopupOpen(true);
     }
 
-    function handleEditAvatarClick() {
-        setIsEditAvatarPopupOpen(true);
-    }
-
     function handleAddPlaceClick() {
         setIsAddPlacePopupOpen(true);
+    }
+
+    function handleEditAvatarClick() {
+        setIsEditAvatarPopupOpen(true);
     }
 
     function handleImagePopupClick() {
@@ -81,13 +74,21 @@ function App() {
         setIsPopupWithConfirmOpen(true);
     }
 
+    function handleInfoTooltipOpen() {
+        setIsInfoTooltipOpen(true);
+    }
+
+    function closePopupOnOverlay(evt) {
+        if (evt.target === evt.currentTarget) {
+            closeAllPopups();
+        }
+    }
+
     function handleCardLike(card) {
-        // Снова проверяем, есть ли уже лайк на этой карточке
         const isLiked = card.likes.some((i) => i === currentUser._id);
-        // Отправляем запрос в API и получаем обновлённые данные карточки
-        api.setLike(card._id, isLiked)
+        api.changeLike(card._id, isLiked)
             .then((newCard) => {
-                setCards((cards) => cards.map((c) => c._id === card._id ? newCard : c));
+                setCards((cards) => cards.map((c) => (c._id === card._id ? newCard : c)));
             })
             .catch((error) => {
                 console.log(`Ошибка: ${error}`);
@@ -137,9 +138,14 @@ function App() {
             });
     }
 
-    // закрытие по нажатию esc
     useEffect(() => {
-        if (isEditProfilePopupOpen || isAddPlacePopupOpen || isEditAvatarPopupOpen || isImagePopupOpen) {
+        if (
+            isEditProfilePopupOpen ||
+            isAddPlacePopupOpen ||
+            isEditAvatarPopupOpen ||
+            isImagePopupOpen ||
+            isPopupWithConfirmOpen
+        ) {
             function handleEscClose(evt) {
                 if (evt.key === "Escape") {
                     closeAllPopups();
@@ -151,32 +157,32 @@ function App() {
                 document.removeEventListener("keydown", handleEscClose);
             };
         }
-    }, [isEditProfilePopupOpen, isAddPlacePopupOpen, isEditAvatarPopupOpen, isImagePopupOpen]);
+    }, [isEditProfilePopupOpen, isAddPlacePopupOpen, isEditAvatarPopupOpen, isImagePopupOpen, isPopupWithConfirmOpen]);
 
     useEffect(() => {
-        if (loggedIn) {
+        if (isLoggedIn) {
             Promise.all([api.getUsersInfo(), api.getCards()])
-                .then(([data, user]) => {
-                    setCards(data);
+                .then(([user, cardInfo]) => {
                     setCurrentUser(user);
+                    setCards(cardInfo);
                 })
                 .catch((error) => {
                     console.log(`Ошибка: ${error}`);
                 });
         }
-    }, [loggedIn]);
+    }, [isLoggedIn]);
 
     useEffect(() => {
-        if (loggedIn) {
+        if (isLoggedIn) {
             getUserData();
         }
     });
 
     function getUserData() {
-        Auth.getEmail()
+        auth.getEmail()
             .then((res) => {
-                setUserInfo(res.email);
-                setLoggedIn(true);
+                setUserEmail(res.email);
+                setIsLoggedIn(true);
             })
             .catch((error) => {
                 console.log(`Ошибка: ${error}`);
@@ -184,103 +190,78 @@ function App() {
     }
 
     useEffect(() => {
-        if (loggedIn) {
+        if (isLoggedIn) {
             history.push("/");
         }
-    }, [loggedIn, history]);
+    }, [isLoggedIn, history]);
 
-    // useEffect(() => {
-    //     handlTokenCheck();
-    //     if (loggedIn) {
-    //         api.getAllData()
-    //             .then(([data, user]) => {
-    //                 setCards(data);
-    //                 setCurrentUser(user);
-    //             })
-    //             .catch((err) => console.log(err));
-    //     }
-    // }, [loggedIn]);
-
-    // function handlTokenCheck() {
-    //     const token = localStorage.getItem("token");
-    //     if (token) {
-    //         Auth.getContent(token)
-    //             .then((res) => {
-    //                 if (res) {
-    //                     setLoggedIn(true);
-    //                     setUserInfo(res.data.email);
-    //                     history.push("/");
-    //                 }
-    //             })
-    //             .catch((err) => console.log(err));
-    //     }
-    // }
-
-    const onRegister = (password, email) => {
-        Auth.register(password, email)
-            .then((res) => {
-                if (res) {
-                    setInfoStatus("success");
-                    history.push("/sign-in");
-                }
-            })
-            .catch((e) => {
-                setInfoStatus("fail");
-            });
-    };
-
-    const onLogin = (password, email) => {
-        Auth.authorize(password, email)
-            .then((res) => {
-                setUserInfo(email);
-                setLoggedIn(() => {
-                    localStorage.setItem("loggedIn", true);
+    function handleLogin({ email, password }) {
+        auth.authorize({ email, password })
+            .then((data) => {
+                setUserEmail(email);
+                setIsLoggedIn(() => {
+                    localStorage.setItem("isloggedIn", true);
                     return true;
                 });
-                // .then((res) => {
-                //     if (res.token) {
-                //         localStorage.setItem("token", res.token);
-                //         setUserInfo(email);
-                //         setLoggedIn(true);
-                //     } else {
-                //         setInfoStatus("fail");
-                //     }
             })
-            .catch((e) => {
-                setInfoStatus("fail");
+            .catch((error) => {
+                setInfoTooltipStatus({
+                    imageType: "imageError",
+                    textType: "textError",
+                });
+                handleInfoTooltipOpen();
+                console.log(`Ошибка: ${error}`);
             });
-    };
+    }
 
-    // const onLogout = () => {
-    //     setLoggedIn(false);
-    //     localStorage.removeItem("token");
-    //     history.push("/sign-in");
-    // };
-    const onLogout = () => {
-        Auth.logOut()
+    function handleLogout() {
+        auth.logOut()
             .then(() => {
-                setLoggedIn(() => {
-                    localStorage.removeItem("loggedIn");
+                setIsLoggedIn(() => {
+                    localStorage.removeItem("isloggedIn");
                     return false;
                 });
-                setUserInfo("");
+                setUserEmail("");
                 history.push("/sign-in");
             })
             .catch((error) => {
                 console.log(`Ошибка: ${error}`);
             });
-    };
-    
+    }
+
+    function handleRegister({ email, password }) {
+        auth.register({ email, password })
+            .then((data) => {
+                if (data) {
+                    setInfoTooltipStatus({
+                        imageType: "imageSuccess",
+                        textType: "textSuccess",
+                    });
+                    handleInfoTooltipOpen();
+                    history.push("/sign-in");
+                }
+            })
+            .catch((error) => {
+                setInfoTooltipStatus({
+                    imageType: "imageError",
+                    textType: "textError",
+                });
+                handleInfoTooltipOpen();
+                console.log(`Ошибка: ${error}`);
+            });
+    }
+
     return (
         <CurrentUserContext.Provider value={currentUser}>
             <div className="page">
-                <Header userInfo={userInfo} onLogout={onLogout} />
+                <Header userEmail={userEmail} onLogOut={handleLogout} />
+
                 <Switch>
                     <ProtectedRoute
                         exact
                         path="/"
-                        loggedIn={loggedIn}
                         component={Main}
+                        isLogged={isLoggedIn}
                         isEditProfilePopupOpen={handleEditProfileClick}
                         isAddPlacePopupOpen={handleAddPlaceClick}
                         isEditAvatarPopupOpen={handleEditAvatarClick}
@@ -290,13 +271,15 @@ function App() {
                         cards={cards}
                     />
                     <Route path="/sign-up">
-                        <Register onRegister={onRegister} />
+                        <Register onRegister={handleRegister} />
                     </Route>
                     <Route path="/sign-in">
-                        <Login onLogin={onLogin} />
+                        <Login onLogin={handleLogin} />
                     </Route>
-                    <Route>{loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}</Route>
+                    <Route path="*">{isLoggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}</Route>
                 </Switch>
+
+                <InfoTooltip onClose={closeAllPopups} isOpen={isInfoTooltipOpen} status={infoTooltipStatus} />
 
                 <Footer />
 
@@ -313,8 +296,6 @@ function App() {
                     onOverlayClose={closePopupOnOverlay}
                     onAddPlace={handleAddPlaceSubmit}
                 />
-
-                <InfoTooltipPopup infoStatus={infoStatus} onClose={closeAllPopups} />
 
                 <EditAvatarPopup
                     isOpen={isEditAvatarPopupOpen}

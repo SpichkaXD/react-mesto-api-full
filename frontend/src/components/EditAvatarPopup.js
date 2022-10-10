@@ -1,5 +1,5 @@
 import PopupWithForm from "./PopupWithForm";
-import { useRef, useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 function EditAvatarPopup({ isOpen, onClose, onOverlayClose, onUpdateAvatar }) {
     const avatarRef = useRef(null);
@@ -18,7 +18,7 @@ function EditAvatarPopup({ isOpen, onClose, onOverlayClose, onUpdateAvatar }) {
 
     return (
         <PopupWithForm
-            name="change-avatar"
+            name="popup_type_edite-avatar"
             title="Обновить аватар"
             buttonName="Сохранить"
             isOpen={isOpen}
@@ -33,7 +33,6 @@ function EditAvatarPopup({ isOpen, onClose, onOverlayClose, onUpdateAvatar }) {
                 id="image-link-input"
                 className="popup__input popup__input_type_link"
                 placeholder="Ссылка на картинку"
-                autoComplete="off"
                 ref={avatarRef}
             />
             <span className="popup__error popup__error_visible" id="image-link-input-error"></span>

@@ -1,6 +1,8 @@
 .profile__user-name {
   margin: 22px 20px 10px 0;
   max-width: 293px;
+  font-family: 'Inter', 'Arial', sans-serif;
+  font-style: normal;
   font-weight: 500;
   font-size: 42px;
   line-height: 1.14;
@@ -9,12 +11,12 @@
   overflow: hidden;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 1000px) {
   .profile__user-name {
-    margin: 0;
-    padding: 26px 10px 6px 46px;
     max-width: 189px;
     font-size: 27px;
     line-height: 1.22;
+    margin: 0;
+    padding: 26px 10px 6px 46px;
   }
 }

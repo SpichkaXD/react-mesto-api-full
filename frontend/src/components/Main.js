@@ -20,7 +20,7 @@ function Main({
                     <img src={currentUser.avatar} alt="Изображение загружается" className="profile__avatar" />
                 </div>
                 <div className="profile__info">
-                    <div className="profile__box">
+                    <div className="profile__text">
                         <h1 className="profile__user-name">{currentUser.name}</h1>
                         <p className="profile__user-activity">{currentUser.about}</p>
                     </div>
@@ -41,7 +41,6 @@ function Main({
 
             <section className="elements">
                 <ul className="elements__container">
-                {console.log(cards)}
                     {cards.map((card) => {
                         return (
                             <Card

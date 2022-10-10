@@ -1,0 +1,10 @@
+.popup__submit-button_type_confirmation {
+  margin: 16px auto 0;
+}
+
+@media screen and (max-width: 600px) {
+  .popup__submit-button_type_confirmation {
+    font-size: 14px;
+    padding-bottom: 14px;
+  }
+}

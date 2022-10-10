@@ -6,8 +6,8 @@ function AddPlacePopup({ isOpen, onClose, onOverlayClose, onAddPlace }) {
     const [link, setLink] = useState("");
 
     useEffect(() => {
-        setName('');
-        setLink('');
+        setName("");
+        setLink("");
     }, [isOpen]);
 
     function handleNameChange(e) {
@@ -29,7 +29,7 @@ function AddPlacePopup({ isOpen, onClose, onOverlayClose, onAddPlace }) {
 
     return (
         <PopupWithForm
-            name="add-card"
+            name="popup_type_add-card"
             title="Новое место"
             buttonName="Создать"
             isOpen={isOpen}
@@ -46,7 +46,6 @@ function AddPlacePopup({ isOpen, onClose, onOverlayClose, onAddPlace }) {
                 id="place-input"
                 className="popup__input popup__input_type_place"
                 placeholder="Название"
-                autoComplete="off"
                 value={name || ""}
                 onChange={handleNameChange}
             />
@@ -58,7 +57,6 @@ function AddPlacePopup({ isOpen, onClose, onOverlayClose, onAddPlace }) {
                 id="link-input"
                 className="popup__input popup__input_type_link"
                 placeholder="Ссылка на картинку"
-                autoComplete="off"
                 value={link || ""}
                 onChange={handleLinkChange}
             />

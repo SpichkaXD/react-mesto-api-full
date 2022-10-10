@@ -4,7 +4,6 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { useEffect, useState } from "react";
 
 function EditProfilePopup({ isOpen, onClose, onOverlayClose, onUpdateUser }) {
-    // Подписка на контекст
     const currentUser = React.useContext(CurrentUserContext);
 
     const [name, setName] = useState("");
@@ -24,10 +23,8 @@ function EditProfilePopup({ isOpen, onClose, onOverlayClose, onUpdateUser }) {
     }
 
     function handleSubmit(e) {
-        // Запрещаем браузеру переходить по адресу формы
         e.preventDefault();
 
-        // Передаём значения управляемых компонентов во внешний обработчик
         onUpdateUser({
             name,
             about: description,
@@ -55,7 +52,6 @@ function EditProfilePopup({ isOpen, onClose, onOverlayClose, onUpdateUser }) {
                 placeholder="Имя"
                 value={name || ""}
                 onChange={handleNameChange}
-                autoComplete="off"
             />
             <span className="popup__error popup__error_visible" id="name-input-error"></span>
             <input
@@ -69,7 +65,6 @@ function EditProfilePopup({ isOpen, onClose, onOverlayClose, onUpdateUser }) {
                 placeholder="Профессия"
                 value={description || ""}
                 onChange={handleDescriptionChange}
-                autoComplete="off"
             />
             <span className="popup__error popup__error_visible" id="activity-input-error"></span>
         </PopupWithForm>
