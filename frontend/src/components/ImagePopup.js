@@ -1,3 +1,4 @@
+import React from "react";
 function ImagePopup({ onClose, onOverlayClose, isOpen, card }) {
     return (
         <div

@@ -1,3 +1,4 @@
+import React from "react";
 function PopupWithConfirm({ isOpen, onClose, onOverlayClose, card, onConfirmDelete }) {
     function handleDeleteClick(e) {
         e.preventDefault();
