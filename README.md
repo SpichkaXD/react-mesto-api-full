@@ -2,8 +2,6 @@
    <img weight=150px height=150px color= black src=".\frontend\src\images\header\header-logo.svg" alt="Project logo"></a>
 </p>
 
-## Mesto-react 
-
 &ensp;
 
 ## 📝 Обзор
@@ -18,9 +16,9 @@
 
 Репозиторий для приложения проекта `Mesto`, включающий фронтенд и бэкенд части приложения со следующими возможностями: авторизации и регистрации пользователей, операции с карточками и пользователями. Бэкенд расположите в директории `backend/`, а фронтенд - в `frontend/`. 
 
-IP 51.250.26.31
-Frontend https://spichka.nomoredomains.icu
-Backend https://api.spichka.nomoredomains.icu
+<p>IP 51.250.26.31</p>
+<p>Frontend https://spichka.nomoredomains.icu</p>
+<p>Backend https://api.spichka.nomoredomains.icu</p>
 
 &ensp;
 
