@@ -2,7 +2,7 @@
    <img weight=150px height=150px src="src/images/logo.svg" alt="Project logo"></a>
 </p> -->
 
-## Mesto-react
+## Mesto-react фронтенд
 
 &ensp;
 
