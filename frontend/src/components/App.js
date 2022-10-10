@@ -13,7 +13,7 @@ import Register from "./Register";
 import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute";
 import InfoTooltip from "./InfoTooltip";
-import { api } from "../utils/api";
+import api from "../utils/api";
 import * as auth from '../utils/auth'
 
 function App() {
