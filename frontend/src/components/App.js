@@ -119,16 +119,16 @@ function App() {
   }
 
   function handleUpdateAvatar(user) {
-    api.addCard(data)
-      .then((newCard) => {
-        setCards([newCard, ...cards]);
+    api.setUserAvatar(user)
+      .then((data) => {
+        setCurrentUser(data);
         closeAllPopups();
       })
       .catch((error) => {
         console.log(`Ошибка: ${error}`);
       })
   }
-
+  
   function handleAddPlaceSubmit(data) {
     api.addCard(data)
       .then((newCard) => {
