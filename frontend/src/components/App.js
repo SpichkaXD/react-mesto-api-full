@@ -14,8 +14,8 @@ import Register from "./Register";
 import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute";
 import InfoTooltip from "./InfoTooltip";
-import { api } from "../utils/Api";
-import * as auth from '../utils/Auth'
+import  { api } from "../utils/Api";
+import * as auth from '../utils/Auth';
 
 function App() {
 
@@ -128,7 +128,7 @@ function App() {
         console.log(`Ошибка: ${error}`);
       })
   }
-
+  
   function handleAddPlaceSubmit(data) {
     api.addCard(data)
       .then((newCard) => {
