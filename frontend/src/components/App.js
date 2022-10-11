@@ -163,7 +163,10 @@ function App() {
           setCards(cardInfo);
         })
         .catch((error) => {
-          localStorage.removeItem('isLoggedIn');
+          setIsLoggedIn(() => {
+            localStorage.setItem('isloggedIn', false)
+            return true;
+          });
           console.log(`Ошибка: ${error}`);
         })
     }
