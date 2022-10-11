@@ -128,7 +128,7 @@ function App() {
         console.log(`Ошибка: ${error}`);
       })
   }
-  
+
   function handleAddPlaceSubmit(data) {
     api.addCard(data)
       .then((newCard) => {
@@ -188,6 +188,9 @@ function App() {
   useEffect(() => {
     if (isLoggedIn) {
       history.push('/');
+    }
+    else {
+      history.push('/sign-in')
     }
   }, [isLoggedIn, history])
 
