@@ -189,9 +189,9 @@ function App() {
     if (isLoggedIn) {
       history.push('/');
     }
-    else {
-      history.push('/sign-in')
-    }
+    // else {
+    //   history.push('/sign-in')
+    // }
   }, [isLoggedIn, history])
 
 
