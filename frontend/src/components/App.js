@@ -1,4 +1,3 @@
-import React from "react";
 import {Route, Switch, Redirect, useHistory} from 'react-router-dom';
 import { useEffect, useState } from "react";
 import {CurrentUserContext} from "../contexts/CurrentUserContext";
@@ -14,8 +13,8 @@ import Register from "./Register";
 import Login from "./Login";
 import ProtectedRoute from "./ProtectedRoute";
 import InfoTooltip from "./InfoTooltip";
-import  { api } from "../utils/Api";
-import * as auth from '../utils/Auth';
+import { api } from "../utils/Api";
+import * as auth from '../utils/auth'
 
 function App() {
 
@@ -189,9 +188,6 @@ function App() {
     if (isLoggedIn) {
       history.push('/');
     }
-    // else {
-    //   history.push('/sign-in')
-    // }
   }, [isLoggedIn, history])
 
 
