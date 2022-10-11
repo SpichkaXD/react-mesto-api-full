@@ -165,7 +165,7 @@ function App() {
         .catch((error) => {
           setIsLoggedIn(() => {
             localStorage.setItem('isloggedIn', false)
-            return true;
+            return false;
           });
           console.log(`Ошибка: ${error}`);
         })
