@@ -168,11 +168,19 @@ function App() {
                     setCards(cardInfo);
                 })
                 .catch((error) => {
-                    localStorage.removeItem('isLoggedIn');
+                    auth.logOut()
+                    .then(() => {
+                        setIsLoggedIn(() => {
+                            localStorage.removeItem("isloggedIn");
+                            return false;
+                        });
+                        setUserEmail("");
+                        history.push("/sign-in");
+                    })
                     console.log(`Ошибка: ${error}`);
                 });
         }
-    }, [isLoggedIn]);
+    }, [history, isLoggedIn]);
 
     useEffect(() => {
         if (isLoggedIn) {
