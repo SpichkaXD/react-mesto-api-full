@@ -3,7 +3,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const { celebrate, Joi, errors } = require('celebrate');
+const { celebrate, Joi } = require('celebrate');
+const { errors } = require('celebrate');
 const NotFoundError = require('./errors/notFoundError');
 const { createUser, login, logout } = require('./controllers/users');
 const { auth } = require('./middlewares/auth');
@@ -14,7 +15,7 @@ const cors = require('./middlewares/cors');
 const { PORT = 3000 } = process.env;
 
 const app = express();
-console.log(process.env);
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());

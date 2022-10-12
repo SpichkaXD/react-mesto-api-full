@@ -16,6 +16,7 @@ module.exports.getUsers = async (req, res, next) => {
     next(err);
   }
 };
+
 module.exports.getUserId = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id);
@@ -25,7 +26,7 @@ module.exports.getUserId = async (req, res, next) => {
     return res.status(200).send(user);
   } catch (err) {
     if (err.name === 'CastError') {
-      return next(new ValidateError('Передан некорректный _id пользователя'));
+      next(new ValidateError('Передан некорректный _id пользователя'));
     }
     return next(err);
   }
@@ -51,10 +52,10 @@ module.exports.createUser = async (req, res, next) => {
     return res.status(201).send(user);
   } catch (err) {
     if (err.name === 'ValidationError') {
-      return next(new ValidateError('Переданы некорректные данные при создании пользователя'));
+      next(new ValidateError('Переданы некорректные данные при создании пользователя'));
     }
     if (err.code === 11000) {
-      return next(new ConflictError('Пользователь с таким email уже существует'));
+      next(new ConflictError('Пользователь с таким email уже существует'));
     }
     return next(err);
   }
@@ -74,10 +75,10 @@ module.exports.updateProfile = async (req, res, next) => {
     return res.status(200).send(user);
   } catch (err) {
     if (err.name === 'CastError') {
-      return next(new ValidateError('Передан некорректный _id пользователя'));
+      next(new ValidateError('Передан некорректный _id пользователя'));
     }
     if (err.name === 'ValidationError') {
-      return next(new ValidateError('Переданы некорректные данные при создании пользователя'));
+      next(new ValidateError('Переданы некорректные данные при создании пользователя'));
     }
     return next(err);
   }
@@ -97,10 +98,10 @@ module.exports.updateAvatar = async (req, res, next) => {
     return res.status(200).send(user);
   } catch (err) {
     if (err.name === 'CastError') {
-      return next(new ValidateError('Передан некорректный _id пользователя'));
+      next(new ValidateError('Передан некорректный _id пользователя'));
     }
     if (err.name === 'ValidationError') {
-      return next(new ValidateError('Переданы некорректные данные при создании пользователя'));
+      next(new ValidateError('Переданы некорректные данные при создании пользователя'));
     }
     return next(err);
   }
@@ -111,19 +112,17 @@ module.exports.login = (req, res, next) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      // const token = jwt.sign({ _id: user._id }, "some-secret-key")
-      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key');
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
 
       res.cookie('jwt', token, {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
-        sameSite: 'none',
-        secure: true,
+        sameSite: true,
       });
       res.send({ token });
     })
     .catch(() => {
-      next(new UnauthorizedError('Необходимо заполнить поля email и пароль'));
+      throw new UnauthorizedError('Необходимо заполнить поля email и пароль');
     })
     .catch(next);
 };
@@ -137,7 +136,7 @@ module.exports.getUserProfile = async (req, res, next) => {
     return res.status(200).send(user);
   } catch (err) {
     if (err.name === 'CastError') {
-      return next(new ValidateError('Передан некорректный _id пользователя'));
+      next(new ValidateError('Передан некорректный _id пользователя'));
     }
     return next(err);
   }
