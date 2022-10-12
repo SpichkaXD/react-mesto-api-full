@@ -2,7 +2,6 @@ import React from "react";
 import imageSuccess from "../images/popup/popup-image-success.png";
 import imageError from "../images/popup/popup-image-error.png";
 
-
 function InfoTooltip({ onClose, isOpen, status: { imageType, textType } = {} }) {
     const images = {
         imageSuccess: imageSuccess,
