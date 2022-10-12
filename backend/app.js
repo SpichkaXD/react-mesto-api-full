@@ -14,6 +14,7 @@ const cors = require('./middlewares/cors');
 const { PORT = 3000 } = process.env;
 
 const app = express();
+console.log(process.env);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -63,7 +64,6 @@ app.use(errorLogger);
 app.use('*', (req, res, next) => {
   next(new NotFoundError('Страница не найдена'));
 });
-
 
 async function main() {
   await mongoose.connect('mongodb://localhost:27017/mestodb', {
