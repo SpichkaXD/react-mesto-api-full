@@ -161,26 +161,28 @@ function App() {
     }, [isEditProfilePopupOpen, isAddPlacePopupOpen, isEditAvatarPopupOpen, isImagePopupOpen, isPopupWithConfirmOpen]);
 
     useEffect(() => {
-        if (isLoggedIn) {
+        if (tokenCheck) {
             Promise.all([api.getUsersInfo(), api.getCards()])
                 .then(([user, cardInfo]) => {
                     setCurrentUser(user);
                     setCards(cardInfo);
                 })
                 .catch((error) => {
-                    auth.logOut()
-                    .then(() => {
-                        setIsLoggedIn(() => {
-                            localStorage.removeItem("isloggedIn");
-                            return false;
-                        });
-                        setUserEmail("");
-                        history.push("/sign-in");
-                    })
+
                     console.log(`Ошибка: ${error}`);
                 });
         }
     }, [history, isLoggedIn]);
+
+    //чек токена
+    function tokenCheck() {
+        let isLoggedIn = false;
+        if (localStorage.getItem('isLoggedIn')) {
+            isLoggedIn = localStorage.getItem('isLoggedIn');
+          setIsLoggedIn(true);
+        }
+        return isLoggedIn;
+      }
 
     useEffect(() => {
         if (isLoggedIn) {
