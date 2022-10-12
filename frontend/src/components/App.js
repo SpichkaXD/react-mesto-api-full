@@ -180,16 +180,6 @@ function App() {
         }
     }, [history, isLoggedIn]);
 
-    //чек токена
-    // function tokenCheck() {
-    //     let isLoggedIn = false;
-    //     if (localStorage.getItem('isLoggedIn')) {
-    //         isLoggedIn = localStorage.getItem('isLoggedIn');
-    //       setIsLoggedIn(true);
-    //     }
-    //     return isLoggedIn;
-    //   }
-
     useEffect(() => {
         if (isLoggedIn) {
             getUserData();
