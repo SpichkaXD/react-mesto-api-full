@@ -168,7 +168,7 @@ function App() {
                     setCards(cardInfo);
                 })
                 .catch((error) => {
-
+                    localStorage.removeItem('isLoggedIn');
                     console.log(`Ошибка: ${error}`);
                 });
         }
